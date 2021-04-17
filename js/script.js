@@ -1,6 +1,9 @@
 let canvas = document.getElementById("snake");
 let context = canvas.getContext("2d");
+var score;
+
 let box = 32;
+
 let snake = [];
 snake[0] = {
     x: 8 * box,
@@ -14,14 +17,29 @@ let food = {
 }
 
 function criarBG() {
-    context.fillStyle = "lightgreen";
+    context.fillStyle = "#2c3e50";
     context.fillRect(0, 0, 16 * box, 16 * box);
 }
 
 function criarCobrinha() {
+    
     for (i = 0; i < snake.length; i++) {
-        context.fillStyle = "green";
-        context.fillRect(snake[i].x, snake[i].y, box, box);
+        
+        if(i == 0){
+          context.fillStyle = "#e67e22";
+        }else{
+        context.fillStyle = "#2ecc71"; 
+        }
+        context.fillRect(snake[i].x, snake[i].y, box-1, box-1);
+
+        if(i === 0){
+            score = 0;
+            document.getElementById("gameOver").innerHTML = "Pontuação: " + score;
+        }else{
+          score = score + 10;  
+        }
+        document.getElementById("gameOver").style.visibility = "visible";
+        document.getElementById("gameOver").innerHTML = "Pontuação: " + score;
     }
 }
 
@@ -30,8 +48,11 @@ function drawFood() {
     context.fillRect(food.x, food.y, box, box);
 }
 
-document.addEventListener('keydown', update);
+function keyPush(event){
+    
+}
 
+document.addEventListener('keydown', update);
 function update(event) {
     if (event.keyCode == 37 && direction != "right") direction = "left";
     if (event.keyCode == 38 && direction != "down") direction = "up";
@@ -49,8 +70,15 @@ function iniciarJogo() {
 
     for (i = 1; i < snake.length; i++) {
         if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+            
+            document.getElementById("gameOver").style.visibility = "visible";
+            document.getElementById("gameOver2").style.visibility = "visible";
+            document.getElementById("gameOver").innerHTML = "GAME OVER ! Você fez " + score + " pontos.";
+            document.getElementById("gameOver2").innerHTML = "GAME OVER ! Jogue novamente!";
+
             clearInterval(jogo);
-            alert('Game Over:(');
+
+            //alert('Game Over:(');
         }
     }
 
@@ -83,4 +111,7 @@ function iniciarJogo() {
     snake.unshift(newHead);
 }
 
-let jogo = setInterval(iniciarJogo, 100);
+let jogo = setInterval(iniciarJogo, 120);
+
+
+
